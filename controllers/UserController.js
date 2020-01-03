@@ -147,6 +147,8 @@ class UserController {
 
         let tr = document.createElement('tr');
         //cria variavel para criar novos elementos tr no HTML
+               
+        tr.dataset.user = JSON.stringify(dataUser); //convertendo o elemento em uma string JSON para não perder o conteúdo
         tr.innerHTML = `
             <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
             <td>${dataUser.name}</td>
@@ -163,7 +165,29 @@ class UserController {
     this.tableEl.appendChild(tr);
     //metodo que appenda a tabela criada à tabela do site
 
+    this.updateCount();
+
 
     } //fecha metodo addLine
+
+    updateCount(){
+
+        let numberUsers = 0;
+        let numberAdmins = 0;
+
+        [...this.tableEl.children].forEach(tr=>{
+
+            numberUsers++;
+
+            let user = JSON.parse(tr.dataset.user); //convertendo o elemento string JSON para objeto
+
+            if (user._admin) numberAdmins++;
+
+        }); //atualizando as contagens de admin e usuário simples
+
+        document.querySelector('#number-users').innerHTML = numberUsers; //atualiza número de usuários
+        document.querySelector('#number-admins').innerHTML = numberAdmins; //atualiza número de administradores
+
+    }
 
 } //fecha class UserController
