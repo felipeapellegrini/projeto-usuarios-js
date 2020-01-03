@@ -123,19 +123,24 @@ class UserController {
     addLine(dataUser) {
 
         let tr = document.createElement('tr');
+        //cria variavel para criar novos elementos tr no HTML
         tr.innerHTML = `
             <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
             <td>${dataUser.name}</td>
             <td>${dataUser.email}</td>
-            <td>${dataUser.admin}</td>
+            <td>${(dataUser.admin) ? 'Sim' : 'Não'/* avalia a resposta do admin e converte em sim/não */}</td>
             <td>${dataUser.birth}</td>
             <td>
                 <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
             </td>
     `;
+    //comando HTML que adiciona as informações do formulario à tabela do site
 
     this.tableEl.appendChild(tr);
+    //metodo que appenda a tabela criada à tabela do site
+
+
     } //fecha metodo addLine
 
 } //fecha class UserController
