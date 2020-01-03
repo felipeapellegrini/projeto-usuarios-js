@@ -20,41 +20,63 @@ class UserController {
 
             values.photo = "";
 
-            this.getPhoto((content) =>{
+            this.getPhoto().then(
+                (content)=>{
+                
+                    values.photo = content;
 
-                values.photo = content;
+                    this.addLine(values);
 
-                this.addLine(values);
-            });
-            //função que recebe o conteúdo da foto em base64 e depois de carregada, adiciona linha na tabela HTML
+                }, 
+                (e)=>{
+
+                    console.error(e);
+
+                }
+            );
+            //função que recebe o conteúdo da foto em base64 e depois de carregada, adiciona linha na tabela HTML em caso de sucesso ou retorna o erro quando fracasso.
             
         });
 
 
     } //fecha onSubmit
 
-    getPhoto(callback){
+    getPhoto(){
 
-        let fileReader = new FileReader();
+        return new Promise((resolve, reject)=>{
 
-        let elements = [...this.formEl.elements].filter(item=>{
+            let fileReader = new FileReader();
 
-            if (item.name === 'photo') {
-                return item;
-            }
+            let elements = [...this.formEl.elements].filter(item=>{
+
+                if (item.name === 'photo') {
+                    return item;
+                }
+            });
+             //retorna apenas o elemento filtrado (photo) do formulario
+
+            let file = elements[0].files[0];
+            //armazena na variavel file o primeiro arquivo da coleção elements
+
+            fileReader.onload = ()=>{
+
+                resolve(fileReader.result);
+            };
+            //metodo que invoca a função de resolve para quando terminar a leitura do arquivo com sucesso
+
+            fileReader.onerror = (e) => {
+
+                reject(e);
+
+            };
+            //metodo que invoca a função reject para quando der falha na leitura do arquivo (tamanho, extensão...)
+
+            fileReader.readAsDataURL(file);
+
         });
-        //retorna apenas o elemento filtrado (photo) do formulario
+        //metodo que trata o arquivo para sucesso e fracasso
 
-        let file = elements[0].files[0];
-        //armazena na variavel file o primeiro arquivo da coleção elements
-
-        fileReader.onload = ()=>{
-
-            callback(fileReader.result);
-        };
-        //metodo que chama a função de callback para quando terminar a leitura
-
-        fileReader.readAsDataURL(file);
+        
         
     }
 
