@@ -71,7 +71,14 @@ class UserController {
             };
             //metodo que invoca a função reject para quando der falha na leitura do arquivo (tamanho, extensão...)
 
-            fileReader.readAsDataURL(file);
+            if (file){
+
+                fileReader.readAsDataURL(file);
+
+            } else{
+                resolve('dist/img/boxed-bg.jpg');
+            }
+            //se o usuario não enviar fotos, trate o arquivo sem foto.
 
         });
         //metodo que trata o arquivo para sucesso e fracasso
