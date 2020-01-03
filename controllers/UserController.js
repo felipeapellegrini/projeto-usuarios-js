@@ -21,6 +21,8 @@ class UserController {
             btn.disabled = true;
 
             let values = this.getValues();
+            
+            if (!values) return false; //trata exceção de gravar foto no vazio caso o usuario de regaço no elements
 
             this.getPhoto().then(
                 (content)=>{
