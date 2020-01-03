@@ -16,17 +16,54 @@ class UserController {
 
             event.preventDefault();
 
-            this.addLine(this.getValues());
+            let values = this.getValues();
+
+            values.photo = "";
+
+            this.getPhoto((content) =>{
+
+                values.photo = content;
+
+                this.addLine(values);
+            });
+            //função que recebe o conteúdo da foto em base64 e depois de carregada, adiciona linha na tabela HTML
+            
         });
 
 
     } //fecha onSubmit
+
+    getPhoto(callback){
+
+        let fileReader = new FileReader();
+
+        let elements = [...this.formEl.elements].filter(item=>{
+
+            if (item.name === 'photo') {
+                return item;
+            }
+        });
+        //retorna apenas o elemento filtrado (photo) do formulario
+
+        let file = elements[0].files[0];
+        //armazena na variavel file o primeiro arquivo da coleção elements
+
+        fileReader.onload = ()=>{
+
+            callback(fileReader.result);
+        };
+        //metodo que chama a função de callback para quando terminar a leitura
+
+        fileReader.readAsDataURL(file);
+        
+    }
 
     getValues(){
 
         let user = {};
         
         [...this.formEl.elements].forEach((field)=>{
+            //usei os [] para declarar a coleção HTML formEl.elements como array, e o ... faz com que o código faça o spread das n posições que esse array pode conter
 
             if (field.name == 'gender' ){
     
@@ -52,7 +89,7 @@ class UserController {
     addLine(dataUser) {
     this.tableEl.innerHTML = `
     <tr>
-        <td><img src="dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
+        <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
         <td>${dataUser.name}</td>
         <td>${dataUser.email}</td>
         <td>${dataUser.admin}</td>
