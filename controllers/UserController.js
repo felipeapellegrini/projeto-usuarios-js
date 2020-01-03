@@ -96,9 +96,18 @@ class UserController {
     getValues(){
 
         let user = {};
+        let isValid = true;
+        
         
         [...this.formEl.elements].forEach((field)=>{
             //usei os [] para declarar a coleção HTML formEl.elements como array, e o ... faz com que o código faça o spread das n posições que esse array pode conter
+
+            if (['name', 'birth', 'email', 'password'].indexOf(field.name) > -1 && !field.value){
+
+                field.parentElement.classList.add('has-error');
+                isValid = false;
+
+            } //valida se os campos obrigatórios estão preenchidos
 
             if (field.name == 'gender' ){
     
@@ -106,19 +115,25 @@ class UserController {
     
                     user[field.name] = field.value;
     
-                }  
+                }  //valida se algum dos generos está marcado e armazena o valor selecionado
     
             } else if (field.name == 'admin'){
 
                 user[field.name] = field.checked;
 
 
-            } else {
+            }  else { //valida se o usuario é administrador
         
                 user[field.name] = field.value;
             }
         
         });
+
+        if (!isValid){
+
+            return false;
+            
+        }//valida se o formulário é válido e quebra se não for
     
         return new User(user.name, user.gender, user.birth, user.country, user.email, user.password, user.photo, user.admin);
 
